@@ -1,0 +1,71 @@
+name: apache2
+#adopt-info: apache2
+version: '2.4.58'
+summary: Apache HTTP Server
+description: |
+  The Apache HTTP Server Project is an effort to develop and maintain an open-source HTTP server for modern operating systems.
+
+base: core20 
+grade: stable
+confinement: strict
+license: Apache-2.0
+
+apps:
+  apache2:
+    command: bin/httpd -k start -DFOREGROUND
+    stop-command: bin/httpd-wrapper -k stop
+    reload-command: bin/httpd-wrapper -k graceful
+    restart-condition: always
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
+
+parts:
+  apache2:
+    plugin: apache
+    source: https://archive.apache.org/dist/httpd/httpd-2.4.58.tar.gz
+    source-type: tar
+    build-packages:
+      - libbrotli-dev
+
+    stage-packages:
+      - libbrotli1
+
+    modules:
+      - headers
+      - proxy
+      - proxy_fcgi
+      - setenvif
+      - env
+      - rewrite
+      - mime
+      - dir
+      - authz_core
+      - unixd
+      - alias
+      - ssl
+      - socache_shmcb
+      - slotmem_shm
+      - log_config
+      - logio
+      - brotli
+      - filter
+      - man
+      - manual
+      - htdocs
+      - include
+      - build
+      - conf/httpd.conf
+      - conf/magic
+      - conf/original
+      - conf/extra
+      - bin/apachectl
+      - bin/envvars*            
+#    override-pull: |
+#      snapcraftctl pull
+#      snapcraftctl set-version "$(curl -s https://httpd.apache.org/download.cgi | grep released | head -n1 | awk '{print $2}' | cut -d ">" -f2 | cut -d "<" -f1)"
+
+
+
+
