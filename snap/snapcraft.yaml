@@ -13,8 +13,6 @@ license: Apache-2.0
 apps:
   apache2:
     command: bin/httpd -k start -DFOREGROUND
-    stop-command: bin/httpd-wrapper -k stop
-    reload-command: bin/httpd-wrapper -k graceful
     restart-condition: always
     daemon: simple
     plugs:
